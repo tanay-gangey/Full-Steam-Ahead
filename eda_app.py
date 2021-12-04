@@ -9,5 +9,5 @@ class InitialEDAApp(HydraHeadApp):
 
 #wrap all your code in this method and you should be done
     def run(self):
-        st.title('About the initial EDA.')
+        st.markdown("<h1 style='text-align: center;'>About the initial EDA</h1>", unsafe_allow_html=True)
         st.info('Hello from the Iniital EDA Page - initial EDA over here')

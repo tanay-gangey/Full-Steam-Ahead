@@ -9,6 +9,6 @@ class AboutApp(HydraHeadApp):
 
 #wrap all your code in this method and you should be done
     def run(self):
-        st.title('About Us')
+        st.markdown("<h1 style='text-align: center;'>Contact Us!</h1>", unsafe_allow_html=True)
         st.info('Hello from the About page - contact details of the team here (and Prof Stamper (pic should be apple pie))')
         
