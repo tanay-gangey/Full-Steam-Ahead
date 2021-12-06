@@ -61,16 +61,21 @@ class LocationVizApp(HydraHeadApp):
             diff_count = diff_count / tc
             metrics.append({
                 "country": country,
-                "same_count": same_count,
-                "diff_count": diff_count
+                "Friendships Within Same Country": same_count,
+                "Friendships Within Different Country": diff_count
             })
         metrics = pd.read_json(json.dumps(metrics))
 
-        px_bar = px.bar(metrics, x='country', y=['same_count', 'diff_count'],
+        px_bar = px.bar(metrics, x='country', y=['Friendships Within Same Country', 'Friendships Within Different Country'],
                         title='Percentage Distribution Of Friendships Within Same Countries Or Different Countries',
-                        labels={"same_count": "Friendships within same countries",
-                                "diff_count": "Friendships in different countries",
-                                "country": "Countries", "value": "Percentage"}, barmode='group')
+                        labels={"country": "Countries", "value": "Percentage"}, barmode='group')
+
+        # texts = ["Friendships within same countries",
+        #          "Friendships in different countries"]
+        # for i, t in enumerate(texts):
+        #     px_bar.data[i].text = t
+        #     px_bar.data[i].textposition = 'outside'
+
         st.plotly_chart(px_bar, use_container_width=True)
 
         col1, col2 = st.columns(2)
