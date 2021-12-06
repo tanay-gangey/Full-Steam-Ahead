@@ -10,6 +10,7 @@ from steam_dataset_app import SteamDatasetApp
 from covid_dataset_app import CovidDatasetApp
 from advanced_app import AdvancedApp
 from about_app import AboutApp
+from top_players_app import TopPlayersVizApp
 from location_viz import LocationVizApp
 
 
@@ -19,6 +20,7 @@ app = hy.HydraApp(title='Full Steam Ahead',
 app.add_app("Home", is_home=True, app=HomeApp())
 app.add_app("Steam Dataset", app=SteamDatasetApp())
 app.add_app("COVID-19 Dataset", app=CovidDatasetApp())
+app.add_app("Top Players", app=TopPlayersVizApp())
 app.add_app("Location Visualization", app=LocationVizApp())
 app.add_app("Advanced", app=AdvancedApp())
 app.add_app("About", app=AboutApp())
