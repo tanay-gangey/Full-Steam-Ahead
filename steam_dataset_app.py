@@ -5,7 +5,7 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 from hydralit import HydraHeadApp
 
-#create a wrapper class
+# create a wrapper class
 class SteamDatasetApp(HydraHeadApp):
 
 #wrap all your code in this method and you should be done
@@ -41,9 +41,7 @@ class SteamDatasetApp(HydraHeadApp):
 
         #  idx, appid, title, type, Price, Release_date, Rating, Required_Age, Is_Multiplayer
 
-        st.markdown("<h1 style='text-align: center;'>About the Data</h1>", unsafe_allow_html=True)
-        st.header("Datasets and Motivation")
-        st.subheader("\tSteam Dataset")
+        st.header("\tSteam Dataset")
         steamintro = """\tSteam is a video game digital distribution system that provides the user 
         with community features such as friends lists and groups and cloud storage.
         We obtained data about various aspects of the platforms such as the friend network, 
@@ -69,6 +67,7 @@ class SteamDatasetApp(HydraHeadApp):
         * Percentage : The percentage of players who have finished this achievement out of all total players who own this game.
             """)
             st.write('\n')
+            st.write('Sample:')
             st.dataframe(achievement_pct.sample(n=5).reset_index(drop=True))
 
         with st.expander("APP_ID_INFO.CSV"):
@@ -83,6 +82,7 @@ class SteamDatasetApp(HydraHeadApp):
         * Is_Multiplayer : A value of either 0 or 1 indicating whether or not an "app" contains multiplayer content. Self-reported by developers.
             """)
             st.write('\n')
+            st.write('Sample:')
             st.dataframe(app_ids_info.sample(n=5).reset_index(drop=True))
 
         with st.expander("FRIENDS.CSV"):        
@@ -100,6 +100,7 @@ class SteamDatasetApp(HydraHeadApp):
         * Developer : A developer of the app in question. Note that some apps have multiple developers and thus numerous distinct rows with the same appid are possible.
             ''')
             st.write('\n')
+            st.write('Sample:')
             st.dataframe(game_developers.sample(n=5).reset_index(drop=True))
 
         with st.expander("GAMES_GENRES.CSV"):
@@ -108,6 +109,7 @@ class SteamDatasetApp(HydraHeadApp):
         * Genre : A genre of the app in question. Note that most apps have multiple genres and thus numerous distinct rows with the same appid are possible.
             ''')
             st.write('\n')
+            st.write('Sample:')
             st.dataframe(games_genres.sample(n=5).reset_index(drop=True))
 
         with st.expander("GAMES.CSV"):
@@ -121,6 +123,7 @@ class SteamDatasetApp(HydraHeadApp):
         * playtime_linux_forever : The total time the user has run this app on linux.
             ''')
             st.write('\n')
+            st.write('Sample:')
             st.dataframe(user_games.sample(n=5).reset_index(drop=True))
 
         with st.expander("PLAYER_SUMMARIES.CSV"):
@@ -332,13 +335,6 @@ class SteamDatasetApp(HydraHeadApp):
 
             ''')
             
-        st.markdown('''
-                    ---
-                    ''')
-
-        st.header("Dataset Statistics")
-        st.write("Pairs of line and then interactive graph explaining the dataset")
-
         st.markdown('''
                     ---
                     ''')
