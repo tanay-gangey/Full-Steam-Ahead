@@ -13,7 +13,7 @@ class CovidDatasetApp(HydraHeadApp):
         all_covid_data = pd.read_csv("covid-data/full_grouped.csv")
         county_covid_data = pd.read_csv("covid-data/usa_county_wise.csv")
 
-        st.subheader("\tCovid-19 Dataset")
+        st.header("\tCovid-19 Dataset")
         covidintro = """\tFor the past two years, people around the world have been affected by the
         global COVID-19 pandemic. This has led to a reduction in outdoor activities and inspired people
         to find alternate sources of entertainment. We hypothesize that the Steam platform and gaming 
@@ -38,6 +38,7 @@ class CovidDatasetApp(HydraHeadApp):
             * WHO Region: Broad region as classified by WHO
             ''')
             st.write('\n')
+            st.write('Sample:')
             st.dataframe(all_covid_data.sample(n=5).reset_index(drop=True))
     
 
@@ -51,6 +52,7 @@ class CovidDatasetApp(HydraHeadApp):
             * Confirmed: Total number of confirmed cases in the county of interest
             ''')
             st.write('\n')
+            st.write('Sample:')
             st.dataframe(county_covid_data.sample(n=5).reset_index(drop=True))
             
         #################################################################################################################
@@ -84,8 +86,8 @@ class CovidDatasetApp(HydraHeadApp):
             "Enter a date between 22-Jan 2020 and 27-Jul-2020", datetime.date(2020, 6, 15))
         dailydata = county_covid_data[county_covid_data['Date'] == str(
             datesel)]
-        dailydata_clean = dailydata[["Date", "Lat", "Long_", "Confirmed"]]
-        dailydata_clean.columns = ["Date", "lat", "lon", "confirmed"]
+        dailydata_clean = dailydata[["Date", "Lat", "Long_", "Confirmed", "Combined_Key"]]
+        dailydata_clean.columns = ["Date", "lat", "lon", "confirmed", "County"]
         midpoint = (np.average(dailydata_clean["lat"]), np.average(
             dailydata_clean["lon"]))
 
@@ -109,12 +111,18 @@ class CovidDatasetApp(HydraHeadApp):
                         get_elevation="confirmed",
                         elevation_scale=40,
                         radius=5000,
-                        get_fill_color=[48, 128, '255 * normalized', 255],
+                        get_fill_color=[0, 128, 255, 255],
                         pickable=True,
                         auto_highlight=True,
                     ),
-                ]
+                ],
+                tooltip={
+                    'html': '<b>Active cases:</b> {confirmed}<br><b>County:</b> {County}',
+                    'style': {
+                        'color': 'white'
+                    }
+                }
             ))
 
-        map(dailydata_clean, midpoint[0], midpoint[1], 5)
+        map(dailydata_clean, midpoint[0], midpoint[1], 3)
     
