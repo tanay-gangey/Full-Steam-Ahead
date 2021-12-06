@@ -17,6 +17,8 @@ class TopPlayersVizApp(HydraHeadApp):
     def run(self):
         combined_achievement_data = pd.read_csv(
             "steam-data/combined_achievement_data.csv")
+        loc_df = pd.read_csv(
+            'steam-data/loc_lat_lng_data_100kUsers.csv')
 
         playtime_vs_achievement = combined_achievement_data.groupby(
             ["appid", "appname", "steamid", "total_playtime"]).agg({"achievement": "count"}).reset_index()
@@ -26,6 +28,21 @@ class TopPlayersVizApp(HydraHeadApp):
 
         top_10_playtime_vs_achievement = playtime_vs_achievement[
             playtime_vs_achievement['appid'].isin(top_10_apps.index)]
+
+        top_country_achievement = playtime_vs_achievement.merge(loc_df, on="steamid").dropna(
+        )[["appid", "appname", "steamid", "total_playtime", "achievement", "country"]]
+
+        quantile_80 = top_country_achievement.achievement.quantile(0.8)
+
+        top_20_percent = top_country_achievement[
+            top_country_achievement['achievement'] > quantile_80]
+
+        px_bar = px.bar(top_20_percent,
+                        x='country', y='achievement',
+                        title='Distribution Of Players (top 20%) Across Countries',
+                        color='appname',
+                        labels={"country": "Countries"})
+        st.plotly_chart(px_bar, use_container_width=True)
 
         scatter_chart = st.altair_chart(
             alt.Chart(top_10_playtime_vs_achievement)
@@ -44,7 +61,7 @@ class TopPlayersVizApp(HydraHeadApp):
             countries = json.load(f)
 
         fig = px.choropleth(country_wise_time, geojson=countries, locations="country",
-                            featureidkey="properties.postal",
+                            featureidkey="properties.iso_a2",
                             color='total_playtime',
                             labels={"country": "Country"},
                             hover_data=["country", "total_playtime"])
