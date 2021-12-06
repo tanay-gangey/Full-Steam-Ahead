@@ -10,11 +10,11 @@ from hydralit import HydraHeadApp
 class CovidDatasetApp(HydraHeadApp):
 
     # wrap all your code in this method and you should be done
-    #def run(self):
+    def run(self):
         all_covid_data = pd.read_csv("covid-data/full_grouped.csv")
         county_covid_data = pd.read_csv("covid-data/usa_county_wise.csv")
 
-        st.header("\tCovid-19 Dataset")
+        st.title("\tCovid-19 Dataset")
         covidintro = """\tFor the past two years, people around the world have been affected by the
         global COVID-19 pandemic. This has led to a reduction in outdoor activities and inspired people
         to find alternate sources of entertainment. We hypothesize that the Steam platform and gaming 
