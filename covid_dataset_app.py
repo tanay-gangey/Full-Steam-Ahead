@@ -10,7 +10,7 @@ from hydralit import HydraHeadApp
 class CovidDatasetApp(HydraHeadApp):
 
     # wrap all your code in this method and you should be done
-    #def run(self):
+    def run(self):
         all_covid_data = pd.read_csv("covid-data/full_grouped.csv")
         county_covid_data = pd.read_csv("covid-data/usa_county_wise.csv")
 
@@ -59,7 +59,9 @@ class CovidDatasetApp(HydraHeadApp):
         #################################################################################################################
 
         st.subheader('Temporal Exploration')
-        st.write('Let\'s start by looking how people were affected with time during the pandemic.')
+        st.write('''Let\'s start by looking how people were affected with time during the pandemic. We plot this data because visualizing the spikes in the COVID-19 cases
+        in each country can help contextualize the spikes in the Steam data corresponding to the achievements completed and the friend graph network at a coarse scale.
+        ''')
         countries = tuple(all_covid_data["Country/Region"].unique())
         selectedcountry = st.selectbox(
             "Choose your country of interest", countries)
@@ -80,7 +82,8 @@ class CovidDatasetApp(HydraHeadApp):
         #################################################################################################################
         
         st.subheader('Regional Exploration')
-        st.write('We can also see the distribution of active cases at different times across the different counties in the United States.')
+        st.write('''We can also see the distribution of active cases at different times across the different counties in the United States. Since the Steam data is available at a state level,
+                 seeing the spikes in COVID cases over time in different states in the US will allow us to analyze the same with more granularity.''')
         county_covid_data["Date"] = pd.to_datetime(
                 county_covid_data["Date"])
         county_covid_data["Date"] = county_covid_data["Date"].dt.strftime(
