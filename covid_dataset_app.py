@@ -3,13 +3,14 @@ import numpy as np
 import pandas as pd
 import pydeck as pdk
 import datetime
+import plotly.express as px
 from hydralit import HydraHeadApp
 
 # create a wrapper class
 class CovidDatasetApp(HydraHeadApp):
 
     # wrap all your code in this method and you should be done
-    def run(self):
+    #def run(self):
         all_covid_data = pd.read_csv("covid-data/full_grouped.csv")
         county_covid_data = pd.read_csv("covid-data/usa_county_wise.csv")
 
@@ -72,7 +73,9 @@ class CovidDatasetApp(HydraHeadApp):
 
         plotdf = all_covid_data[all_covid_data["Country/Region"]
                                 == selectedcountry]
-        st.line_chart(plotdf[option], use_container_width=True)
+        fig = px.line(plotdf,x="Date",y=option)
+        
+        st.plotly_chart(fig, use_container_width=True)
 
         #################################################################################################################
         
