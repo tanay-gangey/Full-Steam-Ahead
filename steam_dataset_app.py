@@ -137,6 +137,10 @@ class SteamDatasetApp(HydraHeadApp):
         * dateretrieved : Timestamp of the time when this game data was requested from the API
             ''')
 
+        st.markdown('''
+                    ---
+                    ''')
+
         #################################################################################################################
 
         st.subheader('Exploring Achievements')
@@ -179,9 +183,12 @@ class SteamDatasetApp(HydraHeadApp):
         - This is further supported by the strongly left skewed first graph.
         ''')
 
-        age_grp = joined_data.groupby('Required_Age', as_index=False).mean()
-        st.pyplot(sns.lmplot(x="Required_Age", y="percentage", data=age_grp))
+        # age_grp = joined_data.groupby('Required_Age', as_index=False).mean()
+        # st.pyplot(sns.lmplot(x="Required_Age", y="percentage", data=age_grp))
 
+        st.markdown('''
+                    ---
+                    ''')
         #################################################################################################################
 
         st.subheader('Exploring Genres and Prices')
@@ -231,7 +238,13 @@ class SteamDatasetApp(HydraHeadApp):
 
         st.write('It can be seen that games and DLCs with a multiplayer component have higher mean prices than games without.')
 
+        st.markdown('''
+                    ---
+                    ''')
+
         #################################################################################################################
+
+        st.subheader("Exploring Game Publishers")
 
         topPublishers = game_publishers.groupby("publisher")["publisher"].count().reset_index(name="count").sort_values("count", ascending=False).head(20)
         bottomPublishers = game_publishers.groupby("publisher")["publisher"].count().reset_index(name="count").sort_values("count", ascending=True).head(20)
@@ -246,7 +259,41 @@ class SteamDatasetApp(HydraHeadApp):
         top_downloads_publishers.plot.bar(x='publisher', y='download_count', xlabel='Publisher', ylabel='Total Downloads', title='Download Counts by Top Publishers')
         bottom_downloads_publishers.plot.bar(x='publisher', y='download_count', xlabel='Publisher', ylabel='Total Downloads', title='Download Counts by Bottom Publishers')
 
-    
+
+        games_combined = user_games.merge(game_publishers, how="left",left_on="appid", right_on="appId")
+        games_combined["download_count"] = games_combined["appid"]
+        top_downloads_publishers = games_combined.groupby("publisher").agg({"playtime_forever": "mean","download_count":"count"}).reset_index().sort_values(by="download_count", ascending=False).head(20)
+        bottom_downloads_publishers = games_combined.groupby("publisher").agg({"playtime_forever": "mean","download_count":"count"}).reset_index().sort_values(by="download_count", ascending=True).head(20)
+
+        top_downloads_publishers.plot.bar(x='publisher', y='download_count', xlabel='Publisher', ylabel='Total Downloads', title='Download Counts by Top Publishers')
+        bottom_downloads_publishers.plot.bar(x='publisher', y='download_count', xlabel='Publisher', ylabel='Total Downloads', title='Download Counts by Bottom Publishers')
+
+        top_downloads_publishers.plot.bar(x='publisher', y='playtime_forever', xlabel='Publisher', ylabel='Average Playtimes', title='Average Playtimes(mins) by Top Publishers')
+        bottom_downloads_publishers.plot.bar(x='publisher', y='playtime_forever', xlabel='Publisher', ylabel='Average Playtimes', title='Average Playtimes(mins) by Bottom Publishers')
+
+
+        st.write('Next we see the correlation between the number of titles published by different game publishers, the average playtime across these titles and the average number of times those titles were downloaded. Only the most popular 30 publishers in terms of the total playtime across their titles have been included for this analysis.')
+        # games_combined_corr_df = games_combined.groupby("publisher").agg({"playtime_forever": "sum","playtime_forever": "mean","download_count":"sum", "appid":"count"}).sort_values(by="download_count", ascending=True).head(30)
+        # games_combined_corr_df = games_combined.groupby("publisher").agg(playtime_forever=("playtime_forever", "sum"), playtime_forever_mean = ("playtime_forever", "mean"), download_count = ("download_count", "sum"), download_count_mean = ("download_count", "mean"), appid = ("appid", "count")).sort_values(by="download_count", ascending=True).head(30)
+        games_combined_corr_df = games_combined.groupby("publisher").agg(playtime_forever_mean=("playtime_forever", "mean"), playtime_forever_sum=("playtime_forever", "sum"), download_count_mean = ("download_count", "mean"), appid_count = ("appid", "count")).sort_values(by="playtime_forever_sum", ascending=False).head(30).drop(columns=['playtime_forever_sum'])
+        corr = games_combined_corr_df.corr()
+        st.plotly_chart(px.imshow(corr,
+                        x=['Average Playtime', 'Average Downloads', 'Total Published'],
+                        y=['Average Playtime', 'Average Downloads', 'Total Published'],
+                        labels={'color': 'Pearson\'s Coefficient'}
+                    ))
+
+        st.write('''
+        - There is a positive correlation between the average downloads and average playtime across titles of a publisher which is expected.
+        - There is a negative correlation between the average playtime across titles and the number of titles published which means that all the titles for most of the publishers are not equally popular. Only a few titles get the most playtime bringing down the average across the published titles.
+        - There is a stronger negative correlation between the average downloads for the titles and the number of titles published which further proves that not all the titles of a particular publisher become popular. Only a few titles are downloaded the most bringing down the average download count across titles.
+        ''')
+
+        st.write('We will now see the total playtime of all the titles made by different publishers and how much they contribute to the total playtime on Steam. This will give an idea of the best publishers.')
+        fig = px.treemap(games_combined.dropna(), path=[px.Constant("all"), 'publisher'], values='playtime_forever')
+        fig.update_layout(margin = dict(t=10, l=25, r=25, b=10))
+        st.plotly_chart(fig)
+
         st.markdown('''
                     ---
                     ''')
@@ -273,7 +320,6 @@ class SteamDatasetApp(HydraHeadApp):
                     ---
                     ''')
                     
-
 
         st.header("Data Processing and Cleaning")
         st.markdown('''
