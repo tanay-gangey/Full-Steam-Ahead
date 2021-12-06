@@ -41,7 +41,7 @@ class SteamDatasetApp(HydraHeadApp):
 
         #  idx, appid, title, type, Price, Release_date, Rating, Required_Age, Is_Multiplayer
 
-        st.header("\tSteam Dataset")
+        st.title("\tSteam Dataset")
         steamintro = """\tSteam is a video game digital distribution system that provides the user 
         with community features such as friends lists and groups and cloud storage.
         We obtained data about various aspects of the platforms such as the friend network, 
@@ -143,7 +143,41 @@ class SteamDatasetApp(HydraHeadApp):
         st.markdown('''
                     ---
                     ''')
+                    
+        #################################################################################################################
+        col1, col2 = st.columns(2) 
 
+        with col1:
+            st.header("Completeness")
+            st.write('''
+- The user play data collected was limited to  ~19,000 interactions on ~1,000 users due to the large size of the dataset (>170GB). Thus, our analysis here might be limited by the size, as there are far more games than users.
+- Publisher information is not available for around 25% of the applications and games present in the dataset. Our analysis of the top publishers may have been affected by this.
+            ''')
+        with col2:
+            st.header("Coherence")
+            st.write('''
+- As our data is data that was grabbed from the Steam API / from prior efforts of people scraping the Steam API, we had no problems in internal coherency. The formatting of all various parameters were easily machine-readable (as they were produced from a SQL database), which also made it easy to ensure that we did not miss anything.
+- While there might be outliers in playtime, upon further inspection (as the users are still publicly facing), the data is accurate - the users actually did play that much. 
+            ''')
+
+        col3, col4 = st.columns(2)
+        with col3:
+            st.header("Correctness")
+            st.write('''
+- There’s definitely the introduction of some random bias in our data due to the surprisingly small amount of user interaction data present in the Games_1 and Games_2 tables.
+- Due to the lack of publisher information for a few titles, the top reported publishers based on the playtime may be incorrect. However, the trends observed in the presented correlation study will still be valid.
+            ''')
+        with col4:
+            st.header("Accountability")
+            st.write('''
+- In our visualizations, specific user information or user-identifying information, like steamid, is not given. We strive to withhold this information for our dissemination, as it serves no purpose here.
+- However, the dataset itself makes no such guarantees, and we’d like to note that this open dataset does contain information about real people that’s just out in the open. If the name associated with a steamid is enough, or if someone knew the accounts associated with the steam id in question, this might lead to this being literal personal information. 
+            ''')
+
+
+        st.markdown('''
+                    ---
+                    ''')        
         #################################################################################################################
 
         st.subheader('Exploring Achievements')
@@ -300,29 +334,7 @@ class SteamDatasetApp(HydraHeadApp):
         st.markdown('''
                     ---
                     ''')
-                    
-        col1, col2 = st.columns(2) 
-
-        with col1:
-            st.header("Completeness")
-            st.write("About the completeness")
-        with col2:
-            st.header("Coherence")
-            st.write("About coherence")
-
-        col3, col4 = st.columns(2)
-
-        with col3:
-            st.header("Correctness")
-            st.write("About the correctness")
-        with col4:
-            st.header("Accountability")
-            st.write("About accountability")
-
-        st.markdown('''
-                    ---
-                    ''')
-                    
+                                
 
         st.header("Data Processing and Cleaning")
         st.markdown('''
