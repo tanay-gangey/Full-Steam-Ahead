@@ -18,7 +18,7 @@ class LocationVizApp(HydraHeadApp):
         df = pd.read_csv(
             'steam-data/loc_lat_lng_data_100kUsers.csv')
 
-        df_sampled = df  # .sample(10000)
+        df_sampled = df
 
         countries = ["All"] + df['country'].unique().tolist()
         country_selectbox = st.selectbox(
@@ -34,20 +34,62 @@ class LocationVizApp(HydraHeadApp):
 
         st.map(filtered_df, zoom=1)
 
+        top_country_players = df_sampled[["country", "percentage_players"]].drop_duplicates(
+        ).nlargest(20, 'percentage_players')
+
+        px_bar = px.bar(top_country_players, x='country', y='percentage_players',
+                        title='Percentage Distribution Of Players Across Top 20 Countries', labels={"percentage_players": "% of Total Players in sample", "country": "Countries"})
+        st.plotly_chart(px_bar, use_container_width=True)
+
         df_friends = pd.read_csv(
-            'steam-data/merged_data_friends_with_loc.csv')  # .sample(frac=sample_slider)
+            'steam-data/merged_data_friends_with_loc.csv')
+
+        metrics = []
+        for country in top_country_players['country']:
+            country_relation_info = df_friends[["country_a", "country_b"]]
+            country_relation_info = country_relation_info[
+                (country_relation_info["country_a"] == country) | (country_relation_info["country_b"] == country)]
+
+            same_count = country_relation_info[country_relation_info[
+                'country_a'] == country_relation_info['country_b']].shape[0]
+
+            diff_count = country_relation_info[country_relation_info[
+                'country_a'] != country_relation_info['country_b']].shape[0]
+
+            tc = same_count + diff_count
+            same_count = same_count / tc
+            diff_count = diff_count / tc
+            metrics.append({
+                "country": country,
+                "same_count": same_count,
+                "diff_count": diff_count
+            })
+        metrics = pd.read_json(json.dumps(metrics))
+
+        px_bar = px.bar(metrics, x='country', y=['same_count', 'diff_count'],
+                        title='Percentage Distribution Of Friendships Within Same Countries Or Different Countries',
+                        labels={"same_count": "Friendships within same countries",
+                                "diff_count": "Friendships in different countries",
+                                "country": "Countries", "value": "Percentage"}, barmode='group')
+        st.plotly_chart(px_bar, use_container_width=True)
 
         col1, col2 = st.columns(2)
         with col1:
+            selector_a = df_friends['country_a'].unique()
+            selector_a = selector_a[selector_a != "US"]
+            selector_a = np.insert(selector_a, 0, "US")
             country_selectbox_a = st.selectbox(
                 "Select Country A",
-                tuple(df_friends['country_a'].unique())
+                tuple(selector_a)
             )
 
         with col2:
+            selector_b = df_friends['country_b'].unique()
+            selector_b = selector_b[selector_b != "IN"]
+            selector_b = np.insert(selector_b, 0, "IN")
             country_selectbox_b = st.selectbox(
                 "Select Country B",
-                tuple(df_friends['country_b'].unique())
+                tuple(selector_b)
             )
 
         filtered_df = df_friends[df_friends[
@@ -55,14 +97,14 @@ class LocationVizApp(HydraHeadApp):
         filtered_df = filtered_df[filtered_df[
             'country_b'] == country_selectbox_b]
 
-        filtered_df['tilt'] = np.random.randint(-50, 50, filtered_df.shape[0])
+        filtered_df['tilt'] = np.random.randint(-25, 25, filtered_df.shape[0])
 
         scatterplot_1 = pdk.Layer(
             "ScatterplotLayer",
             data=filtered_df,
             radius_scale=20,
             get_position=["lon_a", "lat_a"],
-            get_fill_color=[0, 255, 0],
+            get_fill_color=[0, 0, 0],
             get_radius=2000,
             pickable=True,
         )
@@ -72,7 +114,7 @@ class LocationVizApp(HydraHeadApp):
             data=filtered_df,
             radius_scale=20,
             get_position=["lon_b", "lat_b"],
-            get_fill_color=[0, 255, 0],
+            get_fill_color=[0, 0, 0],
             get_radius=2000,
             pickable=True,
         )
@@ -95,7 +137,13 @@ class LocationVizApp(HydraHeadApp):
         layers = [scatterplot_1, scatterplot_2, line_layer]
 
         st.pydeck_chart(pdk.Deck(
-            # map_style='mapbox://styles/mapbox/light-v9',
+            map_style='mapbox://styles/mapbox/light-v9',
+            initial_view_state=pdk.ViewState(
+                latitude=35.99934160945984,
+                longitude=-32.11052813375463,
+                zoom=1,
+                # pitch=50,
+            ),
             layers=layers,
             tooltip={
                 "html": "<b>User 1:</b> {lon_a}, {lat_a}, {country_a} <br/> <b>User 2:</b> {lon_b}, {lat_b}, {country_b}",
@@ -106,20 +154,3 @@ class LocationVizApp(HydraHeadApp):
             }
 
         ))
-
-        # r = pdk.Deck(
-        #     layers=layers,
-        #     tooltip={
-        #         "html": "<b>User 1:</b> {lon_a}, {lat_a}, {country_a} <br/> <b>User 2:</b> {lon_b}, {lat_b}, {country_b}",
-        #         "style": {
-        #             "backgroundColor": "steelblue",
-        #             "color": "white"
-        #         }
-        #     }
-
-        # )
-
-        # r.to_html("out.html")
-
-        # with open("out.html") as f:
-        #     components.html(f.read())
