@@ -32,7 +32,34 @@ class LocationVizApp(HydraHeadApp):
         else:
             filtered_df = df_sampled
 
-        st.map(filtered_df, zoom=1)
+        st.pydeck_chart(pdk.Deck(
+            map_style='mapbox://styles/mapbox/light-v9',
+            initial_view_state=pdk.ViewState(
+                latitude=35.99934160945984,
+                longitude=-32.11052813375463,
+                zoom=1,
+            ),
+            layers=[
+                pdk.Layer(
+                    "ScatterplotLayer",
+                    data=filtered_df,
+                    radius_scale=20,
+                    get_position=["lon", "lat"],
+                    get_fill_color=[220, 20, 60],
+                    get_radius=2000,
+                    pickable=True,
+                )
+            ],
+            tooltip={
+                "html": "<b>Location:</b> {lon}, {lat}, {country}",
+                "style": {
+                    "backgroundColor": "steelblue",
+                    "color": "white"
+                }
+            }
+
+        ))
+        # st.map(filtered_df, zoom=1)
 
         top_country_players = df_sampled[["country", "percentage_players"]].drop_duplicates(
         ).nlargest(20, 'percentage_players')
