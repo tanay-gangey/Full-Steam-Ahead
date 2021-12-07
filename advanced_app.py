@@ -39,7 +39,7 @@ class AdvancedApp(HydraHeadApp):
         
         pairwise_metrics = np.loadtxt("steam-data/baseSimilarity.txt")
 
-        st.pyplot(sns.clustermap(pairwise_metrics))
+        st.pyplot(sns.clustermap(pairwise_metrics, figsize=(10,7)))
 
         st.write("Here, any white square indicates a large region where many users have similar playtimes. Thus, we can see that we have the following:")
         st.write("- Firstly, a large section of users that play similar games on Steam. Looking at this cluster individually, it appears that this cluster is full of those who play games for longer playtimes, focusing on games that can handle that usage, like first-person shooters like CSGO.")
@@ -66,7 +66,7 @@ class AdvancedApp(HydraHeadApp):
         
         a = st.slider("Number of Components in LR Approximation", min_value=1, max_value=15, step=1)
         low_rank = np.loadtxt("steam-data/"+str(a)+"ranksimilarity.txt")
-        st.pyplot(sns.clustermap(low_rank))
+        st.pyplot(sns.clustermap(low_rank, figsize=(10,7)))
         
         st.write("From here, we can conclude the following about the algorithm:")
         st.write("- For this dataset, a rank one approximation would simply give all users similar recommendations, equal to that of the most prevalent games.")
