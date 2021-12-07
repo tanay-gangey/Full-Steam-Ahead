@@ -15,8 +15,15 @@ import streamlit.components.v1 as components
 class LocationVizApp(HydraHeadApp):
 
     def run(self):
+        st.write("""
+            ##### In order to visualize Steam usage around the world, we sample a dataset of 100,000 Steam users and plot their locations on an interactive world map. One can also view country-wise distribution by using the drop-down on top of the world map to apply a country filter.
+        """)
         df = pd.read_csv(
             'steam-data/loc_lat_lng_data_100kUsers.csv')
+
+        st.write("""
+            ##### We can see that Steam as a gaming platform is quite popular around the globe.
+        """)
 
         df_sampled = df
 
@@ -64,9 +71,24 @@ class LocationVizApp(HydraHeadApp):
         top_country_players = df_sampled[["country", "percentage_players"]].drop_duplicates(
         ).nlargest(20, 'percentage_players')
 
+        st.write("---")
+        st.write(""" 
+            #####  Next we want to see which countries have the most number of players. Below we have given a bar graph displaying the top 20 countries with the highest percentage of players. From the bar graph we see that countries such as USA, Russia, Germany, Brazil & Great-Britain have the highest number of users.
+        """)
+
         px_bar = px.bar(top_country_players, x='country', y='percentage_players',
                         title='Percentage Distribution Of Players Across Top 20 Countries', labels={"percentage_players": "% of Total Players in sample", "country": "Countries"})
         st.plotly_chart(px_bar, use_container_width=True)
+
+        st.write("---")
+
+        st.write(""" 
+            #####  We also wanted to explore the locational distribution of Steam connections and whether there are a large number of users who are connected across regions. We intend to see if this might indicate that the communities formed are more collaborative and interesting to study compared to traditional social networks which tend to follow people who live near each other. This helps us see how gaming is bringing the world together.
+        """)
+
+        st.write(""" 
+            #####  We have first plotted for the top 20 countries, the percentage of Friendships users have within their own country compared to the percentage of friendships that users have outside their country. We see a general trend of users having larger number of friends outside their own country. This confirms our belief that in contrast to regular Social Media, Gaming is indeed helping people make connections around the world.
+        """)
 
         df_friends = pd.read_csv(
             'steam-data/merged_data_friends_with_loc.csv')
@@ -104,6 +126,14 @@ class LocationVizApp(HydraHeadApp):
         #     px_bar.data[i].textposition = 'outside'
 
         st.plotly_chart(px_bar, use_container_width=True)
+
+        st.write(""" 
+            #####  Here we have an interactive graph where we can visualize the number of Friendships between Steam users of any two countries within our sample.
+        """)
+
+        st.write(""" 
+            Please select Country A and Country B from the dropdowns to view the number of connections between these two countries.
+        """)
 
         col1, col2 = st.columns(2)
         with col1:
