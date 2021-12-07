@@ -72,7 +72,7 @@ class TopPlayersVizApp(HydraHeadApp):
             "steam-data/country_wise_player_time.csv")
 
         st.write("""
-            ##### Given below we also have an interactive map which shows the total playtime across the top 20 countries.
+            ##### Given below we also have an interactive map which shows the total playtime across the top 20 countries. This also supports our analysis that the total playtime is the main contributing factor to making a Top Player. Russia, which produces the maximum number of Top Players has one of the highest total play-times as a country.
         """)
 
         country_wise_time = combined_country_wise_player.groupby(["country", "lat", "lon"])[
