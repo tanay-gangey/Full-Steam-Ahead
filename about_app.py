@@ -10,6 +10,9 @@ class AboutApp(HydraHeadApp):
 
 #wrap all your code in this method and you should be done
     def run(self):
+        
+        st.title("Team")
+        
         col1 = st.columns(1)         
         col1, col2, col3 = st.columns(3)
         
