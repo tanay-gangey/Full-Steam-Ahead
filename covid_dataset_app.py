@@ -131,4 +131,12 @@ class CovidDatasetApp(HydraHeadApp):
             ))
 
         map(dailydata_clean, midpoint[0], midpoint[1], 3)
+        
+        st.markdown('''
+                    ---
+                    ''')
+
+        st.subheader("Sources")
+        st.write("[1] https://www.kaggle.com/imdevskp/corona-virus-report")
+        st.write("[2] https://www.kaggle.com/sudalairajkumar/novel-corona-virus-2019-dataset")
     

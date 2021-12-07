@@ -25,4 +25,5 @@ app.add_app("Location Visualization", app=LocationVizApp())
 app.add_app("Playtime Recommender", app=AdvancedApp())
 app.add_app("Social Aspects", app=SocialApp())
 app.add_app("Team", app=AboutApp())
+
 app.run()
