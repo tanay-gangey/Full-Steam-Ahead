@@ -242,7 +242,7 @@ class SteamDatasetApp(HydraHeadApp):
         avg_price=('Price', 'mean'),
         item_count=('Price', 'count')
         ).reset_index()
-        fig = px.scatter(type_price_info, x="Type", y="avg_price", size="item_count", hover_name="Type")
+        fig = px.scatter(type_price_info[type_price_info['Type'].isin(['game', 'dlc', 'demo', 'video'])], x="Type", y="avg_price", size="item_count", hover_name="Type")
         fig.update_xaxes(showgrid=False)
         fig.update_yaxes(showgrid=False)
         st.plotly_chart(fig)
