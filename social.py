@@ -20,14 +20,14 @@ class SocialApp(HydraHeadApp):
             return "0" + month
 
     def run(self):
-        st.markdown("<h1 style='text-align: center; color: white;'>Social Impact of COVID-19: Steam Users</h1>", unsafe_allow_html=True)
+        st.title("Social Impacts of COVID-19: Steam Users")
         st.write("\n")
         st.write("\n")
         st.write("\n")
-        st.subheader("In order to understand the impact of a pandemic on the social lifestyles of people, here we are looking at the number of COVID-19 cases acorss the world and the new friends added for a sample of steam users. ")
+        st.write("In order to understand the impact of a pandemic on the social lifestyles of people, here we are looking at the number of COVID-19 cases acorss the world and the new friends added for a sample of steam users. ")
         
         st.write("\n")
-        st.subheader("Plot 1 shows the total friends added for a sampled user dataset on steam during a month around pandemic")
+        st.write("Plot 1 shows the total friends added for a sampled user dataset on steam during a month around pandemic")
         df = pd.read_csv("steam-data/NewFriends.csv")
         df = df[df['year'] > 2019]
         df['friend_since'] =  pd.to_datetime(df['friend_since'])
@@ -39,7 +39,7 @@ class SocialApp(HydraHeadApp):
         st.line_chart(df2)
 
         st.write("\n")
-        st.subheader("Plot 2 shows the total number of new COVID cases during a month.")
+        st.write("Plot 2 shows the total number of new COVID cases during a month.")
         covid_df = pd.read_csv("covid-data/active_cases.csv")
 #         covid_df['ObservationDate'] =  pd.to_datetime(covid_df['ObservationDate'])
 #         covid_df['year-month'] = covid_df['ObservationDate'].dt.strftime('%Y/%m')
@@ -60,7 +60,7 @@ class SocialApp(HydraHeadApp):
         st.line_chart(df2)
         
         st.write("\n")
-        st.subheader("We observed that during the early days of pandemic there was a sudden rise in the new friends added on steam. As the number of COVID cases rose, serveral countries had imposed complete lockdowns which led to a sudden fall in the social lives of people. Clearly, people needed some source of social interaction because of which a large number of people got into online multiplayer gaming.")
+        st.write("We observed that during the early days of pandemic there was a sudden rise in the new friends added on steam. As the number of COVID cases rose, serveral countries had imposed complete lockdowns which led to a sudden fall in the social lives of people. Clearly, people needed some source of social interaction because of which a large number of people got into online multiplayer gaming.")
         
         
   
