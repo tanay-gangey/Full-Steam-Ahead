@@ -45,6 +45,9 @@ class TopPlayersVizApp(HydraHeadApp):
         top_20_percent = top_country_achievement[
             top_country_achievement['achievement'] > quantile_80]
 
+        top_5_games = top_20_percent['appid'].value_counts().head(5).reset_index()['index'].tolist()
+        top_20_percent.loc[~top_20_percent['appid'].isin(top_5_games), 'appname'] = 'Other'
+
         scatter_chart = st.altair_chart(
             alt.Chart(top_10_playtime_vs_achievement)
             .mark_circle(size=60)
