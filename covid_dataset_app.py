@@ -19,8 +19,7 @@ class CovidDatasetApp(HydraHeadApp):
         global COVID-19 pandemic. This has led to a reduction in outdoor activities and inspired people
         to find alternate sources of entertainment. We hypothesize that the Steam platform and gaming 
         community has been an important source of catharsis for many people affected around the globe. 
-        We analyse the effect the pandemic has had in terms of the growth of the community, the time 
-        spent on the Steam platform and the achievement completion percentage of games on the platform.
+        We analyse the effect the pandemic has had in terms of the growth of the community.
         We collected the COVID-19 data from Kaggle. The dataset contains information about the daily cases
         in each country in the world as well as the county-wise data for the United States. 
             """
@@ -46,7 +45,7 @@ class CovidDatasetApp(HydraHeadApp):
         with st.expander("USA_COUNTY_WISE.CSV"):
             st.write('''
             * Date: Date corresponding to the data for each row
-            * Combined_Key: A string thta contains the admin, state and country 
+            * Combined_Key: A string that contains the admin, state and country 
             * Lat: Latitude corresponding to the combined key 
             * Long_: Longitude corresponding to the combined key
             * Deaths: The cumulative number of deaths
@@ -82,8 +81,8 @@ class CovidDatasetApp(HydraHeadApp):
         #################################################################################################################
         
         st.subheader('Regional Exploration')
-        st.write('''We can also see the distribution of active cases at different times across the different counties in the United States. Since the Steam data is available at a state level,
-                 seeing the spikes in COVID cases over time in different states in the US will allow us to analyze the same with more granularity.''')
+        st.write('''We can also see the distribution of active cases at different times across the different counties in the United States. Though the Steam data is not available at a granular level,
+                 seeing the spikes in COVID cases over time in different states in the US allows us to set the stage for future work at a higher granularity.''')
         county_covid_data["Date"] = pd.to_datetime(
                 county_covid_data["Date"])
         county_covid_data["Date"] = county_covid_data["Date"].dt.strftime(

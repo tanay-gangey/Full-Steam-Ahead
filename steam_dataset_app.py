@@ -143,6 +143,21 @@ class SteamDatasetApp(HydraHeadApp):
         st.markdown('''
                     ---
                     ''')
+        
+        st.header("Data Processing and Cleaning")
+        st.markdown('''
+        - As described above, we first converted data from the SQL to CSV format.
+        - Removed the index column as it is not used in any of our analysis.
+        - Joined app_ID_Info and Acheievement_Percentages on app_id so that the entire relation is available easily for analysis.
+        - Joined the app_id and name to see if there are any duplicate achievements and found that there were no repeated acheivements, which is great!
+        - Dropped the columns `relationship` and `dateretrieved` from `Friends` data since the first one has only a constant value for all cases and the second one is not relevant to our analysis.
+        - Dropped the rows with `friend_since` column less than 2009 since the field `friend_since` was added in 2009 and all the other entries before that had the epoch date set as a filler date.
+
+            ''')
+            
+        st.markdown('''
+                    ---
+                    ''')
                     
         #################################################################################################################
         col1, col2 = st.columns(2) 
@@ -335,22 +350,6 @@ class SteamDatasetApp(HydraHeadApp):
                     ---
                     ''')
                                 
-
-        st.header("Data Processing and Cleaning")
-        st.markdown('''
-        - As described above, we first converted data from the SQL to CSV format.
-        - Removed the index column as it is not used in any of our analysis.
-        - Joined app_ID_Info and Acheievement_Percentages on app_id so that the entire relation is available easily for analysis.
-        - Joined the app_id and name to see if there are any duplicate achievements and found that there were no repeated acheivements, which is great!
-        - Dropped the columns `relationship` and `dateretrieved` from `Friends` data since the first one has only a constant value for all cases and the second one is not relevant to our analysis.
-        - Dropped the rows with `friend_since` column less than 2009 since the field `friend_since` was added in 2009 and all the other entries before that had the epoch date set as a filler date.
-
-            ''')
-            
-        st.markdown('''
-                    ---
-                    ''')
-
         st.subheader("Sources")
         st.write("[1] https://steam.internet.byu.edu/")
         st.write("[2] https://developer.valvesoftware.com/wiki/Steam_Web_API")
