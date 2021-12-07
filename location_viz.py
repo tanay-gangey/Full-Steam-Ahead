@@ -87,7 +87,7 @@ class LocationVizApp(HydraHeadApp):
         """)
 
         st.write(""" 
-            #####  We have first plotted for the top 20 countries, the percentage of Friendships users have within their own country compared to the percentage of friendships that users have outside their country. We see a general trend of users having larger number of friends outside their own country. This confirms our belief that in contrast to regular Social Media, Gaming is indeed helping people make connections around the world.
+            #####  We have first plotted for the top 20 countries, the percentage of Friendships users have within their own country compared to the percentage of friendships that users have outside their country. We see a general trend of users having larger number of friends outside their own country. This supports our belief that in contrast to regular Social Media, Gaming is indeed helping people make connections around the world.
         """)
 
         df_friends = pd.read_csv(
