@@ -64,11 +64,13 @@ class TopPlayersVizApp(HydraHeadApp):
             ##### Russia seems to produce the most number of top players followed by United States
         """)
 
-        px_bar = px.bar(top_20_percent,
+        px_bar = px.histogram(top_20_percent,
                         x='country', y='achievement',
                         title='Distribution Of Players (top 20%) Across Countries',
-                        color='appname',
+                        # color='appname',
                         labels={"country": "Countries", "achievement": "Number of Achievements"})
+        px_bar.update_layout(yaxis_title="Number of Achievements")
+
         st.plotly_chart(px_bar, use_container_width=True)
 
         combined_country_wise_player = pd.read_csv(
